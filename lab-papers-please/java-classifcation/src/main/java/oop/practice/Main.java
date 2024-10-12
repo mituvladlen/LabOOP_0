@@ -1,30 +1,21 @@
 package oop.practice;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class Main {
   public static void main(String[] args) {
-
     JsonFileReader jsonReader = new JsonFileReader();
-    String filePath = "path/to/your/input.json";
+    View view = new View(); // Create an instance of View
+    String filePath = "src/main/resources/input.json"; // Adjust this path accordingly
 
     try {
-      jsonReader.printFileContent(filePath);
-      System.out.println();
-      jsonReader.parseAndPrintJson(filePath);
+      // Read and parse the JSON content
+      List<JsonNode> jsonContent = jsonReader.parseJson(filePath);
+      view.displayJsonContent(jsonContent); // Display the content using View
     } catch (IOException e) {
-      System.err.println("Error reading the file: " + e.getMessage());
+      view.displayMessage("Error reading the file: " + e.getMessage());
     }
-
-
-
-
   }
 }
