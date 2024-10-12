@@ -3,56 +3,62 @@ package oop.practice;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class LordOfTheRingsUniverse {
 
     public static void main(String[] args) {
-        String jsonData = readFile("src/main/resources/input.json"); // Adjust the path accordingly
-        printLotRDetails(jsonData);
+        String jsonData = readFile("input.json"); // Adjust the path accordingly
+        generateLotRDetails(jsonData);
     }
 
-    public static void printLotRDetails(String jsonData) {
+    public static void generateLotRDetails(String jsonData) {
         JSONObject jsonObject = new JSONObject(jsonData);
-        JSONArray data = jsonObject.getJSONArray("data");
+        JSONArray inputArray = jsonObject.getJSONArray("input");
 
-        System.out.println("Lord of the Rings Universe IDs and Details:");
+        JSONArray lotrIndividuals = new JSONArray();
 
-        for (int i = 0; i < data.length(); i++) {
-            JSONObject individual = data.getJSONObject(i);
+        for (int i = 0; i < inputArray.length(); i++) {
+            JSONObject individual = inputArray.getJSONObject(i);
 
-            // Check if the individual is from the Lord of the Rings Universe
-            String planet = individual.optString("planet", "Unknown Planet");
-            boolean hasPointyEarsTrait = hasTrait(individual, "POINTY_EARS"); // Check for POINTY_EARS trait
+            String planet = individual.optString("planet", "Unknown");
+            int age = individual.optInt("age", -1);  // Use -1 if age is not provided
+            boolean hasPointyEarsTrait = hasTrait(individual, "POINTY_EARS");
 
-            // Check if age exists and is greater than 5000
-            int age = individual.optInt("age", -1); // Use -1 if age is not specified
-
-            // The character belongs to the Lord of the Rings Universe if the planet is Earth or has POINTY_EARS trait
+            // Conditions for a Lord of the Rings character:
+            // - From planet Earth
+            // - Has POINTY_EARS trait
+            // - IsHumanoid and has BULKY trait
+            // - Age greater than 5000
             if (planet.equals("Earth") || hasPointyEarsTrait ||
                     (individual.optBoolean("isHumanoid", false) && hasTrait(individual, "BULKY")) ||
-                    (age > 5000)) {
-                printCharacterDetails(individual);
+                    age > 5000) {
+                // Add individual to the output
+                JSONObject lotrCharacter = new JSONObject();
+                lotrCharacter.put("id", individual.getInt("id"));
+                lotrCharacter.put("isHumanoid", individual.optBoolean("isHumanoid", false));
+                lotrCharacter.put("age", individual.optInt("age", 0));
+                lotrCharacter.put("traits", individual.optJSONArray("traits"));
+
+                lotrIndividuals.put(lotrCharacter);
             }
         }
-    }
 
-    private static void printCharacterDetails(JSONObject individual) {
-        System.out.println("ID: " + individual.getInt("id"));
-        System.out.println("Is Humanoid: " + individual.optBoolean("isHumanoid", false));
-        System.out.println("Planet: " + individual.optString("planet", "Unknown Planet"));
-        System.out.println("Age: " + individual.optString("age", "Unknown Age"));
+        // Create the final JSON object
+        JSONObject lotrOutput = new JSONObject();
+        lotrOutput.put("name", "rings");
+        lotrOutput.put("individuals", lotrIndividuals);
 
-        // Check if traits exist before printing
-        JSONArray traits = individual.optJSONArray("traits");
-        if (traits != null) {
-            System.out.println("Traits: " + traits.toString());
-        } else {
-            System.out.println("Traits: No traits available");
+        // Write the output to rings.json
+        try (FileWriter file = new FileWriter("output/rings.json")) {
+            file.write(lotrOutput.toString(4));  // Pretty print with indentation
+            System.out.println("Lord of the Rings output written to rings.json");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        System.out.println();
     }
 
     private static boolean hasTrait(JSONObject individual, String trait) {
