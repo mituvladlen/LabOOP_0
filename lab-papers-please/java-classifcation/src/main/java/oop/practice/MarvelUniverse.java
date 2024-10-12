@@ -3,52 +3,57 @@ package oop.practice;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class MarvelUniverse {
 
     public static void main(String[] args) {
-        String jsonData = readFile("src/main/resources/input.json"); // Adjust the path accordingly
+        String jsonData = readFile("input.json"); // Adjust the path accordingly
         if (jsonData != null) {
-            printMarvelDetails(jsonData);
+            generateMarvelDetails(jsonData);
         } else {
             System.out.println("Failed to read JSON data.");
         }
     }
 
-    public static void printMarvelDetails(String jsonData) {
+    public static void generateMarvelDetails(String jsonData) {
         JSONObject jsonObject = new JSONObject(jsonData);
-        JSONArray data = jsonObject.getJSONArray("data");
+        JSONArray inputArray = jsonObject.getJSONArray("input");
 
-        System.out.println("Marvel Universe IDs and Details:");
-        for (int i = 0; i < data.length(); i++) {
-            JSONObject individual = data.getJSONObject(i);
+        JSONArray marvelIndividuals = new JSONArray();
 
-            // Check if the character is humanoid and either from Asgard or has required traits (not Earth)
+        for (int i = 0; i < inputArray.length(); i++) {
+            JSONObject individual = inputArray.getJSONObject(i);
+
             if (individual.optBoolean("isHumanoid", false) &&
                     (isCharacterFromAsgard(individual) || (hasBothRequiredTraits(individual) && !isCharacterFromEarth(individual)))) {
 
-                System.out.println("ID: " + individual.getInt("id"));
-                System.out.println("Is Humanoid: " + individual.getBoolean("isHumanoid"));
-                System.out.println("Planet: " + individual.optString("planet", "Unknown Planet"));
+                // Create a new JSON object for each character and add it to the Marvel array
+                JSONObject marvelCharacter = new JSONObject();
+                marvelCharacter.put("id", individual.getInt("id"));
+                marvelCharacter.put("isHumanoid", individual.optBoolean("isHumanoid", false));
+                marvelCharacter.put("planet", individual.optString("planet", "Unknown Planet"));
+                marvelCharacter.put("age", individual.optInt("age", 0));
+                marvelCharacter.put("traits", individual.optJSONArray("traits"));
 
-                // Check if age exists
-                if (individual.has("age")) {
-                    System.out.println("Age: " + individual.getInt("age"));
-                } else {
-                    System.out.println("Age: Not specified");
-                }
-
-                // Print traits
-                JSONArray traits = individual.optJSONArray("traits");
-                if (traits != null) {
-                    System.out.println("Traits: " + traits.toString());
-                } else {
-                    System.out.println("Traits: No traits available");
-                }
-                System.out.println();
+                marvelIndividuals.put(marvelCharacter);
             }
+        }
+
+        // Create the final JSON object
+        JSONObject marvelOutput = new JSONObject();
+        marvelOutput.put("name", "marvel");
+        marvelOutput.put("individuals", marvelIndividuals);
+
+        // Write the output to marvel.json
+        try (FileWriter file = new FileWriter("output/marvel.json")) {
+            file.write(marvelOutput.toString(4)); // Pretty print with indentation
+            System.out.println("Marvel output written to marvel.json");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
