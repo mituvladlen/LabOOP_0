@@ -3,7 +3,7 @@
     {
       "id": 0,
       "isHumanoid": false,
-      "planet": "Kashyyyk",
+      "planet": "Kashyyk",
       "age": 253,
       "traits": [
         "HAIRY",
@@ -109,7 +109,7 @@
     },
     {
       "id": 13,
-      "planet": "Kashyyyk",
+      "planet": "Kashyyk",
       "age": 352,
       "traits": [
         "HAIRY",

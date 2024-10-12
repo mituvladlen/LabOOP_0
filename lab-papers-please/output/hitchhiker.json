@@ -1,27 +1,44 @@
 {
-  "name": "hitchHiker",
-  "individuals": [
-    {
-      "id": 2,
-      "isHumanoid": false,
-      "age": 128,
-      "traits": [
-        "GREEN"
-      ]
-    },
-    {
-      "id": 4,
-      "age": 26,
-      "traits": [
-        "EXTRA_ARMS"
-      ]
-    },
-    {
-      "id": 5,
-      "isHumanoid": false,
-      "traits": [
-        "BULKY"
-      ]
-    }
-  ]
+    "name": "hitchHiker",
+    "individuals": [
+        {
+            "isHumanoid": true,
+            "traits": [
+                "EXTRA_ARMS",
+                "EXTRA_HEAD"
+            ],
+            "id": 3,
+            "age": 59
+        },
+        {
+            "isHumanoid": false,
+            "traits": [
+                "GREEN",
+                "BULKY"
+            ],
+            "id": 4,
+            "age": 128
+        },
+        {
+            "isHumanoid": false,
+            "traits": [
+                "EXTRA_ARMS",
+                "EXTRA_HEAD"
+            ],
+            "id": 10,
+            "age": 45
+        },
+        {
+            "isHumanoid": false,
+            "traits": ["EXTRA_ARMS"],
+            "id": 17,
+            "age": 26
+        },
+        {
+            "isHumanoid": false,
+            "traits": ["EXTRA_HEAD"],
+            "id": 21,
+            "age": 82
+        }
+    ]
 }
