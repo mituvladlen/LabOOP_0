@@ -3,52 +3,63 @@ package oop.practice;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class StarWarsUniverse {
 
     public static void main(String[] args) {
-        String jsonData = readFile("src/main/resources/input.json"); // Adjust the path accordingly
-        printStarWarsDetails(jsonData);
+        String jsonData = readFile("input.json"); // Adjust the path accordingly
+        if (jsonData != null) {
+            generateStarWarsDetails(jsonData);
+        } else {
+            System.out.println("Failed to read JSON data.");
+        }
     }
 
-    public static void printStarWarsDetails(String jsonData) {
+    public static void generateStarWarsDetails(String jsonData) {
         JSONObject jsonObject = new JSONObject(jsonData);
-        JSONArray data = jsonObject.getJSONArray("data");
+        JSONArray inputArray = jsonObject.getJSONArray("input");
 
-        System.out.println("Star Wars Universe IDs and Details:");
+        JSONArray starWarsIndividuals = new JSONArray();
 
-        for (int i = 0; i < data.length(); i++) {
-            JSONObject individual = data.getJSONObject(i);
+        for (int i = 0; i < inputArray.length(); i++) {
+            JSONObject individual = inputArray.getJSONObject(i);
 
-            // Check if the individual is from the Star Wars Universe
             boolean isHumanoid = individual.optBoolean("isHumanoid", false);
             String planet = individual.optString("planet", "Unknown Planet");
-            boolean hasHairyTrait = hasTrait(individual, "HAIRY"); // Check for HAIRY trait
+            boolean hasHairyTrait = hasTrait(individual, "HAIRY");
 
-            // The character belongs to Star Wars Universe if isHumanoid is false and the planet is either Kashyyk or Endor
+            // The character belongs to Star Wars Universe if:
+            // - they are non-humanoid and from Kashyyk or Endor
+            // - OR they have the HAIRY trait
             if (!isHumanoid && (planet.equals("Kashyyk") || planet.equals("Endor")) || hasHairyTrait) {
-                printCharacterDetails(individual);
+                // Create a new JSON object for each character and add it to the Star Wars array
+                JSONObject starWarsCharacter = new JSONObject();
+                starWarsCharacter.put("id", individual.getInt("id"));
+                starWarsCharacter.put("isHumanoid", isHumanoid);
+                starWarsCharacter.put("planet", planet);
+                starWarsCharacter.put("age", individual.optInt("age", 0));
+                starWarsCharacter.put("traits", individual.optJSONArray("traits"));
+
+                starWarsIndividuals.put(starWarsCharacter);
             }
         }
-    }
 
-    private static void printCharacterDetails(JSONObject individual) {
-        System.out.println("ID: " + individual.getInt("id"));
-        System.out.println("Is Humanoid: " + individual.optBoolean("isHumanoid", false));
-        System.out.println("Planet: " + individual.optString("planet", "Unknown Planet"));
-        System.out.println("Age: " + individual.optString("age", "Unknown Age"));
+        // Create the final JSON object
+        JSONObject starWarsOutput = new JSONObject();
+        starWarsOutput.put("name", "starwars");
+        starWarsOutput.put("individuals", starWarsIndividuals);
 
-        // Check if traits exist before printing
-        JSONArray traits = individual.optJSONArray("traits");
-        if (traits != null) {
-            System.out.println("Traits: " + traits.toString());
-        } else {
-            System.out.println("Traits: No traits available");
+        // Write the output to starwars.json
+        try (FileWriter file = new FileWriter("output/starwars.json")) {
+            file.write(starWarsOutput.toString(4)); // Pretty print with indentation
+            System.out.println("Star Wars output written to starwars.json");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-
-        System.out.println();
     }
 
     private static boolean hasTrait(JSONObject individual, String trait) {
