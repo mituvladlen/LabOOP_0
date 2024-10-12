@@ -12,7 +12,16 @@ import java.util.Scanner;
 public class Main {
   public static void main(String[] args) {
 
+    JsonFileReader jsonReader = new JsonFileReader();
+    String filePath = "path/to/your/input.json";
 
+    try {
+      jsonReader.printFileContent(filePath);
+      System.out.println();
+      jsonReader.parseAndPrintJson(filePath);
+    } catch (IOException e) {
+      System.err.println("Error reading the file: " + e.getMessage());
+    }
 
 
 
