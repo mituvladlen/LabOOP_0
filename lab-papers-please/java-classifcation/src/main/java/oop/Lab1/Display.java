@@ -14,6 +14,11 @@ public class Display {
         this.model = model;
     }
 
+    // Getter for model
+    public String getModel() {
+        return model;
+    }
+
     // Method to compare size based on width and height
     public void compareSize(Display otherDisplay) {
         int thisArea = this.width * this.height;
