@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 public class EvenIdCharacters {
 
     public static void main(String[] args) {
-        String jsonData = readFile("src/main/resources/input.json"); // Adjust the path accordingly
+        String jsonData = readFile("C:\\Users\\vladl\\OneDrive\\Desktop\\Univer\\OOP\\oop-course-repo\\LabOOP_0\\lab-papers-please\\java-classifcation\\src\\main\\resources\\input.json"); // Adjust the path accordingly
         if (jsonData != null) {
             printEvenIdCharacters(jsonData);
         } else {
