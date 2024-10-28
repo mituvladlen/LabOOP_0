@@ -1,27 +1,25 @@
 package oop.Lab1;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.IOException;
 
 public class TextFileProcessor {
     public static void main(String[] args) {
-        if (args.length == 0) {
-            System.out.println("Please provide a file path as a program argument.");
-            return;
-        }
+        for (String filePath : args) {
+            try {
+                String text = Files.readString(Paths.get(filePath));
+                TextData textData = new TextData(filePath, text);
 
-        String filePath = args[0];
-
-        // Read file content
-        FileReader fileReader = new FileReader();
-        String textContent = fileReader.readFileIntoString(filePath);
-
-        if (textContent != null) {
-            TextData textData = new TextData(textContent);
-            System.out.println("File: " + textData.getFilename());
-            System.out.println("Text: " + textData.getText());
-            System.out.println("Vowels: " + textData.getNumberOfVowels());
-            System.out.println("Consonants: " + textData.getNumberOfConsonants());
-            System.out.println("Letters: " + textData.getNumberOfLetters());
-            System.out.println("Sentences: " + textData.getNumberOfSentences());
-            System.out.println("Longest Word: " + textData.getLongestWord());
+                System.out.println("File: " + textData.getFileName());
+                System.out.println("Number of Vowels: " + textData.getNumberOfVowels());
+                System.out.println("Number of Consonants: " + textData.getNumberOfConsonants());
+                System.out.println("Number of Letters: " + textData.getNumberOfLetters());
+                System.out.println("Number of Sentences: " + textData.getNumberOfSentences());
+                System.out.println("Longest Word: " + textData.getLongestWord());
+                System.out.println("------------------------------");
+            } catch (IOException e) {
+                System.err.println("Failed to read file: " + filePath);
+            }
         }
     }
 }
