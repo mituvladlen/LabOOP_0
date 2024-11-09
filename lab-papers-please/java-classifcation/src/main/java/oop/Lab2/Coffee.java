@@ -1,15 +1,21 @@
 package oop.Lab2;
 
-
-public class Coffee {
+public abstract class Coffee {
     protected Intensity coffeeIntensity;
-    protected final String name = "Coffee";
+    protected String name;
 
-    public Coffee(Intensity coffeeIntensity) {
+    public Coffee(Intensity coffeeIntensity, String name) {
         this.coffeeIntensity = coffeeIntensity;
+        this.name = name;
     }
 
-    public void printDetails() {
-        System.out.println("Coffee intensity: " + coffeeIntensity);
+    public abstract Coffee makeCoffee();
+
+    protected void printIntensity() {
+        System.out.println("Intensity: " + coffeeIntensity);
+    }
+
+    public void printCoffeeDetails() {
+        System.out.println(name + " intensity: " + coffeeIntensity);
     }
 }

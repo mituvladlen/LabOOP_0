@@ -1,17 +1,24 @@
 package oop.Lab2;
 
 public class Cappuccino extends Coffee {
-    private int mlOfMilk;
-    private final String coffee = "Cappuccino";
+    protected int mlOfMilk;
 
     public Cappuccino(Intensity coffeeIntensity, int mlOfMilk) {
-        super(coffeeIntensity);
+        super(coffeeIntensity, "Cappuccino");
         this.mlOfMilk = mlOfMilk;
     }
 
     @Override
-    public void printDetails() {
-        super.printDetails();
-        System.out.println("Cappuccino milk: " + mlOfMilk + "ml");
+    public Cappuccino makeCoffee() {
+        System.out.println("Making " + name);
+        printIntensity();
+        System.out.println("Adding " + mlOfMilk + " ml of milk");
+        return this;
+    }
+
+    @Override
+    public void printCoffeeDetails() {
+        super.printCoffeeDetails();
+        System.out.println("Milk: " + mlOfMilk + " ml");
     }
 }
