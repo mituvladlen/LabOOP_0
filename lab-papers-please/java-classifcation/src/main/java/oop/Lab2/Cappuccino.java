@@ -1,7 +1,7 @@
 package oop.Lab2;
 
 public class Cappuccino extends Coffee {
-    private int mlOfMilk;
+    protected int mlOfMilk;
 
     public Cappuccino(Intensity coffeeIntensity, int mlOfMilk) {
         super(coffeeIntensity, "Cappuccino");
@@ -14,7 +14,6 @@ public class Cappuccino extends Coffee {
         System.out.println("Milk: " + mlOfMilk + " ml");
     }
 
-    @Override
     public void makeCoffee() {
         System.out.println("Making " + name);
         printCoffeeDetails();
