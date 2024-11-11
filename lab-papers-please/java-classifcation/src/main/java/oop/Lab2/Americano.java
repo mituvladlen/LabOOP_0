@@ -9,16 +9,15 @@ public class Americano extends Coffee {
     }
 
     @Override
-    public Americano makeCoffee() {
-        System.out.println("Making " + name);
-        printIntensity();
-        System.out.println("Adding " + mlOfWater + " ml of water");
-        return this;
-    }
-
-    @Override
     public void printCoffeeDetails() {
         super.printCoffeeDetails();
         System.out.println("Water: " + mlOfWater + " ml");
+    }
+
+    @Override
+    public void makeCoffee() {
+        System.out.println("Making " + name);
+        printCoffeeDetails();
+        System.out.println("Adding " + mlOfWater + " ml of water\n");
     }
 }
