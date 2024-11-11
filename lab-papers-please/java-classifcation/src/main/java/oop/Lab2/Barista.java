@@ -1,6 +1,4 @@
 package oop.Lab2;
-
-
 import java.util.List;
 
 public class Barista {
@@ -9,9 +7,7 @@ public class Barista {
         for (String order : coffeeOrders) {
             Coffee coffee = createCoffee(order);
             if (coffee != null) {
-                coffee.printCoffeeDetails();
                 coffee.makeCoffee();
-                System.out.println();
             } else {
                 System.out.println("Unknown coffee type: " + order);
             }
